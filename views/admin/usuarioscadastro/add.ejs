@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Novo Admin</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --brand-950: #07172c;
+      --forest-900: #0d311d;
+      --forest-800: #16421f;
+      --forest-700: #1f5b2e;
+      --forest-100: #e8f4ec;
+      --text-900: #102033;
+      --text-700: #334155;
+      --text-500: #64748b;
+      --border: #d5dde6;
+      --card: #ffffff;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-900);
+      background: linear-gradient(135deg, rgba(7, 23, 44, 0.96), rgba(13, 49, 29, 0.92));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .shell {
+      width: min(100%, 1380px);
+      min-height: min(88vh, 860px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.06fr) minmax(420px, 0.94fr);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 14px;
+      background:
+        linear-gradient(180deg, rgba(248, 250, 252, 0.9), rgba(248, 250, 252, 0.7) 18%, rgba(7, 23, 44, 0.08)),
+        rgba(255, 255, 255, 0.72);
+      box-shadow: 0 26px 70px rgba(0, 0, 0, 0.35);
+    }
+
+    .intro {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 42px 48px;
+      color: #ffffff;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.86) 0%, rgba(20, 63, 42, 0.28) 22%, rgba(5, 24, 24, 0.9) 72%),
+        linear-gradient(135deg, rgba(11, 31, 75, 0.72), rgba(13, 49, 29, 0.78)),
+        linear-gradient(160deg, #dfe9e3 0%, #8aa896 24%, #2e5941 52%, #081d20 100%);
+    }
+
+    .intro::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.72), transparent 26%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 64px);
+      pointer-events: none;
+    }
+
+    .intro > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: var(--forest-900);
+    }
+
+    .brand-logo {
+      width: 126px;
+      height: 126px;
+      object-fit: contain;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(13, 49, 29, 0.15);
+      padding: 10px;
+      box-shadow: 0 12px 28px rgba(7, 23, 44, 0.18);
+    }
+
+    .brand-title h1 {
+      font-size: clamp(1.8rem, 3.2vw, 2.75rem);
+      line-height: 1.16;
+      font-weight: 800;
+      color: var(--forest-900);
+    }
+
+    .brand-title p {
+      margin-top: 10px;
+      font-size: clamp(1rem, 1.5vw, 1.28rem);
+      font-weight: 700;
+      color: var(--forest-900);
+    }
+
+    .message {
+      max-width: 620px;
+      margin-top: 110px;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+    }
+
+    .message h2 {
+      max-width: 560px;
+      font-size: clamp(1.6rem, 3vw, 2.45rem);
+      line-height: 1.18;
+      margin-bottom: 24px;
+    }
+
+    .message p {
+      max-width: 620px;
+      font-size: 1.08rem;
+      line-height: 1.55;
+    }
+
+    .legal {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: min(100%, 520px);
+      margin-top: 44px;
+      padding: 18px 22px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(8px);
+      font-size: 0.98rem;
+      line-height: 1.45;
+    }
+
+    .login-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 56px 48px;
+      background: rgba(247, 250, 248, 0.88);
+    }
+
+    .card {
+      width: min(100%, 560px);
+      background: var(--card);
+      border: 1px solid rgba(213, 221, 230, 0.95);
+      border-radius: 12px;
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.14);
+      padding: 44px 38px;
+    }
+
+    .lock {
+      width: 76px;
+      height: 76px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: var(--forest-800);
+      color: #ffffff;
+      box-shadow: 0 10px 24px rgba(22, 66, 31, 0.25);
+    }
+
+    .card h2 {
+      color: var(--forest-900);
+      text-align: center;
+      font-size: 1.7rem;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--text-700);
+      text-align: center;
+      margin-bottom: 28px;
+      font-size: 1rem;
+    }
+
+    form {
+      display: grid;
+      gap: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-900);
+    }
+
+    .field {
+      position: relative;
+    }
+
+    .field svg {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      color: var(--text-500);
+      pointer-events: none;
+    }
+
+    input {
+      width: 100%;
+      min-height: 52px;
+      padding: 13px 48px 13px 50px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #ffffff;
+      color: var(--text-900);
+      font-size: 0.98rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--forest-700);
+      box-shadow: 0 0 0 3px rgba(31, 91, 46, 0.14);
+    }
+
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-500);
+      cursor: pointer;
+    }
+
+    .toggle-password svg {
+      position: static;
+      transform: none;
+      pointer-events: auto;
+    }
+
+    .submit,
+    .back-link {
+      width: 100%;
+      min-height: 54px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 7px;
+      font-size: 1rem;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s, border-color 0.2s;
+    }
+
+    .submit {
+      margin-top: 4px;
+      border: none;
+      background: var(--forest-800);
+      color: #ffffff;
+    }
+
+    .submit:hover {
+      background: var(--forest-900);
+      transform: translateY(-1px);
+    }
+
+    .back-link {
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--forest-900);
+    }
+
+    .back-link:hover {
+      border-color: var(--forest-700);
+      transform: translateY(-1px);
+    }
+
+    .notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-top: 22px;
+      padding: 18px;
+      border-radius: 8px;
+      border: 1px solid #b8dcc5;
+      background: var(--forest-100);
+      color: #17351f;
+      line-height: 1.42;
+    }
+
+    .notice strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .error {
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 12px 14px;
+      font-size: 0.92rem;
+    }
+
+    .footer {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 20px 42px;
+      background: linear-gradient(90deg, var(--forest-900), #0c3a1b);
+      color: #ffffff;
+    }
+
+    .footer-brand,
+    .footer-secure {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-brand strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .footer-brand span,
+    .footer-secure,
+    .copyright {
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 980px) {
+      body {
+        padding: 16px;
+      }
+
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .intro {
+        padding: 30px;
+      }
+
+      .brand {
+        align-items: flex-start;
+      }
+
+      .brand-logo {
+        width: 86px;
+        height: 86px;
+      }
+
+      .message {
+        margin-top: 46px;
+      }
+
+      .login-panel {
+        padding: 28px;
+      }
+
+      .card {
+        padding: 32px 24px;
+      }
+
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 22px 30px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        padding: 0;
+      }
+
+      .shell {
+        min-height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+
+      .intro {
+        padding: 24px 18px;
+      }
+
+      .brand {
+        gap: 14px;
+      }
+
+      .brand-logo {
+        width: 68px;
+        height: 68px;
+      }
+
+      .brand-title h1 {
+        font-size: 1.25rem;
+      }
+
+      .brand-title p,
+      .message p,
+      .legal {
+        font-size: 0.92rem;
+      }
+
+      .message h2 {
+        font-size: 1.4rem;
+      }
+
+      .login-panel {
+        padding: 20px 14px;
+      }
+
+      .card {
+        padding: 26px 18px;
+      }
+
+      .footer {
+        padding: 20px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="intro" aria-label="Apresentação do sistema">
+      <div>
+        <div class="brand">
+          <img class="brand-logo" src="/imagem/logoro.png" alt="Logo RO">
+          <div class="brand-title">
+            <h1>Sistema de Registro de Ocorrências Ambientais</h1>
+            <p>Delegacia de Crimes Ambientais</p>
+          </div>
+        </div>
+
+        <div class="message">
+          <h2>Cadastro de administrador</h2>
+          <p>Crie um acesso administrativo para acompanhar denúncias, relatórios e solicitações do sistema.</p>
+        </div>
+      </div>
+
+      <div class="legal">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 3v18"></path>
+          <path d="m5 7 7-4 7 4"></path>
+          <path d="M5 7 2 14h6L5 7z"></path>
+          <path d="M19 7l-3 7h6l-3-7z"></path>
+          <path d="M6 21h12"></path>
+        </svg>
+        <span>Cadastro permitido apenas para super administradores autenticados.</span>
+      </div>
+    </section>
+
+    <section class="login-panel" aria-label="Formulário de cadastro de administrador">
+      <div class="card">
+        <div class="lock">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </div>
+        <h2>Novo Admin</h2>
+        <p class="subtitle">Informe os dados para cadastrar um administrador</p>
+
+        <form action="/admin/usuarios/add" method="POST">
+          <% if (typeof erro !== 'undefined' && erro) { %>
+            <div class="error"><%= erro %></div>
+          <% } %>
+
+          <div>
+            <label for="nome">Nome</label>
+            <div class="field">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21a8 8 0 0 0-16 0"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <input id="nome" name="nome" type="text" placeholder="Digite o nome do admin" autocomplete="name" required>
+            </div>
+          </div>
+
+          <div>
+            <label for="email">Email</label>
+            <div class="field">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                <path d="m3 7 9 6 9-6"></path>
+              </svg>
+              <input id="email" name="email" type="email" placeholder="Digite o email" autocomplete="email" required>
+            </div>
+          </div>
+
+          <div>
+            <label for="senha">Senha</label>
+            <div class="field">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+                <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+              </svg>
+              <input id="senha" name="senha" type="password" placeholder="Digite a senha" autocomplete="new-password" required>
+              <button class="toggle-password" type="button" aria-label="Mostrar senha" onclick="togglePassword()">
+                <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <button class="submit" type="submit">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14"></path>
+              <path d="M5 12h14"></path>
+            </svg>
+            Cadastrar Admin
+          </button>
+        </form>
+
+        <a class="back-link" href="/admin/denuncia/lst">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5"></path>
+            <path d="m12 19-7-7 7-7"></path>
+          </svg>
+          Voltar para denúncias
+        </a>
+
+        <div class="notice">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <path d="m9 12 2 2 4-5"></path>
+          </svg>
+          <div>
+            <strong>O novo usuário terá acesso administrativo.</strong>
+            <span>Revise os dados antes de confirmar o cadastro.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-brand">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          <path d="M8.5 12.5 11 15l4.5-6"></path>
+        </svg>
+        <div>
+          <strong>Sistema de Registro de Ocorrências Ambientais</strong>
+          <span>Delegacia de Crimes Ambientais</span>
+        </div>
+      </div>
+      <div class="copyright">Acesso administrativo</div>
+      <div class="footer-secure">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+          <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+        </svg>
+        Ambiente restrito
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    function togglePassword() {
+      const input = document.getElementById('senha');
+      const icon = document.getElementById('eyeIcon');
+      const visible = input.type === 'text';
+      input.type = visible ? 'password' : 'text';
+      icon.innerHTML = visible
+        ? '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"></path><circle cx="12" cy="12" r="3"></circle>'
+        : '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-6.5 0-10-7-10-7a18.45 18.45 0 0 1 5.06-5.94"></path><path d="M9.9 4.24A10.7 10.7 0 0 1 12 4c6.5 0 10 7 10 7a18.54 18.54 0 0 1-2.16 3.19"></path><path d="M14.12 14.12A3 3 0 0 1 9.88 9.88"></path><path d="M1 1l22 22"></path>';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<%- include('../cabecalho.ejs') %>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Jogador</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+    <h1><i class="fas fa-edit"></i> Edição de time</h1>
+    <div class="container">
+        <form  method="post" enctype="multipart/form-data">
+            <label for="nome"><i class="fas fa-tshirt"></i>Clube:</label>
+            <input type="text" id="nome" name="nome" value="<%=Time.nome%>" required placeholder="Digite o Clube">
+            
+            <label for="estadio"><i class="fas fa-landmark"></i>Estádio:</label>
+            <input type="text" id="estadio" name="estadio" value="<%=Time.estadio%>" required placeholder="Digite o Estádio">
+
+        
+            <label for="datafundacao"><i class="fas fa-landmark"></i>Data da fundação:</label>
+            <input type="date" id="datafundacao" name="datafundacao" value="<%=Time.datafundacao%>" required placeholder="Digite a data da fundação">
+            
+         <label for="escudo">Escudo:</label>
+         <img src="/imagem/<%= Time.escudo %>" class="foto" />
+         <input type="file" id="escudo" name="escudo" >
+         <input type="hidden" name="escudoatual" value="<%= Time.escudo %>">
+
+
+            <button type="submit" class="btn"><i class="fas fa-save"></i>Efetuar Edição</button>
+
+        </form>
+    </div>
+</body>
+
+</html>

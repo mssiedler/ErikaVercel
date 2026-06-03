@@ -1,0 +1,268 @@
+/* Reset geral */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos para o formulário de denúncia */
+.linha {
+  display: flex;
+  gap: 20px; /* espaço entre os campos */
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* faz os dois ocuparem o mesmo tamanho */
+}
+
+/* Fonte principal */
+body {
+    background-color: #f3faf5;
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    
+}
+
+/* Cabeçalho */
+header {
+    background-color: #16421f;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(22, 66, 31, 0.28);
+}
+
+header h1 {
+    color: #FFFFFF;
+    font-size: 2.2rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Navegação */
+nav {
+    background-color: #FFFFFF;
+    padding: 15px 0;
+    box-shadow: 0 4px 20px rgba(22, 66, 31, 0.08);
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    gap: 30px;
+}
+
+nav a {
+    color: #16421f;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s;
+}
+
+nav a:hover {
+    background-color: #16421f;
+    color: #FFFFFF;
+}
+
+/* Container */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Títulos */
+h1 {
+    text-align: center;
+    color: #000000c5;
+    margin-bottom: 10px;
+    font-size: medium;
+    
+}
+
+/* Formulário */
+form {
+  max-width: 800px;   /* largura do formulário */
+  margin: 0 auto;     /* centraliza */
+  padding: 20px;
+}
+
+/* form:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 40px rgba(22, 66, 31, 0.1);
+} */
+
+/* cores dos titulos do formulario */
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #000000c5;
+    font-weight: 600;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #D0D0D0;
+    border-radius: 10px;
+    background-color: #F8FAFF;
+    color: #0D0D0D;
+    margin-bottom: 20px;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+input:focus, select:focus {
+    border-color: #000000c5;
+    background-color: #FFFFFF;
+    outline: none;
+}
+
+/* Botões */
+button, .add-button a {
+    width: 100%;
+    background-color: #000000c5;
+    color: #FFFFFF;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+button:hover, .add-button a:hover {
+    background-color: #000000;
+    transform: translateY(-2px);
+}
+
+/* Tabela */
+table {
+    width: 100%;
+    max-width: 1000px;
+    margin: 40px auto; /* Centraliza horizontalmente */
+    border-collapse: collapse;
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(22, 66, 31, 0.08);
+    border: 1px solid #D0D0D0;
+    transition: box-shadow 0.3s ease;
+}
+
+th, td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #000000;
+}
+
+th {
+    background-color: #eeeeee;
+    color: #000000c5;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+}
+
+tr:hover {
+    background-color: #F8FAFF;
+}
+
+td a {
+    background-color: #000000c5;
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-weight: 600;
+}
+
+td a:hover {
+    background-color: #000000;
+}
+
+/* Foto no formulário */
+.foto {
+    display: block;
+    width: 100px;
+    height: 120px;
+    margin: 5px 0;
+    /* margin-top: 100%; */
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    border: 1px solid #000000c5;
+}
+
+.foto:hover {
+    transform: scale(1.05);
+}
+/* formulario */
+/* Input file */
+input[type="file"] {
+    background-color: #F8FAFF;
+    color: #000000c5;
+    border: 1px solid #000000c5;
+    cursor: pointer;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .foto {
+        width: 80px;
+    }
+
+    table, form {
+        width: 100%;
+    }
+}
+header {
+    background-color: #16421f;
+    padding: 20px 0;
+    box-shadow: 0 4px 15px rgba(22, 66, 31, 0.28);
+    position: relative;
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    max-width: 120px;
+    margin: 0 auto;
+}
+
+.logo {
+    position: absolute;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+header h1 {
+    color: #FFFFFF;
+    font-size: 2.2rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0 auto;
+}

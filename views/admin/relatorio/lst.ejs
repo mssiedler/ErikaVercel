@@ -1,0 +1,277 @@
+<%- include('../cabecalho2.ejs', { currentSection: 'relatorio' }) %>
+            <div id="reportsPage" class="page active">
+                <div class="page-header">
+                    <h2>Relatórios e Gráficos</h2>
+                    <select class="filter-select">
+                        <option value="todos">Todos os períodos</option>
+                        <option value="mes">Último mês</option>
+                        <option value="trimestre">Último trimestre</option>
+                        <option value="ano">Último ano</option>
+                    </select>
+                </div>
+
+                <!-- Cards de Estatísticas -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <div>
+                                <p class="stat-label">Total de Denúncias</p>
+                                <p class="stat-value"><%= totalDenuncias %></p>
+                            </div>
+                            <svg class="stat-icon blue" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <div>
+                                <p class="stat-label">Resolvidas</p>
+                                <p class="stat-value green"><%= totalResolvidas %></p>
+                            </div>
+                            <svg class="stat-icon green" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <div>
+                                <p class="stat-label">Pendentes</p>
+                                <p class="stat-value yellow"><%= totalPendentes %></p>
+                            </div>
+                            <svg class="stat-icon yellow" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <div>
+                                <p class="stat-label">Taxa de Resolução</p>
+                                <p class="stat-value purple"><%= taxaResolucao %>%</p>
+                            </div>
+                            <svg class="stat-icon purple" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráficos -->
+                <div class="charts-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Denúncias por Status</h3>
+                            <p class="card-description">Distribuição das denúncias por situação atual</p>
+                        </div>
+                        <div class="card-content">
+                            <div class="chart-container">
+                                <canvas id="statusChart"></canvas>
+                            </div>
+                            <div id="statusLegend" class="chart-bars"></div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Denúncias por Tipo</h3>
+                            <p class="card-description">Classificação entre denúncias de animais e ambientais</p>
+                        </div>
+                        <div class="card-content">
+                            <div class="chart-bars">
+                                <div class="chart-bar-item">
+                                    <div class="chart-bar-label">Animais</div>
+                                    <div class="chart-bar-wrapper">
+                                        <!-- porcentagemdenúncias de animais. */ %> -->
+                                        <div class="chart-bar" style="width: <%= percentualAnimais %>%">
+                                            <span><%= totalAnimais %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="chart-bar-item">
+                                    <div class="chart-bar-label">Ambiental</div>
+                                    <div class="chart-bar-wrapper">
+                                        <!-- porcentagem denúncias ambientais. -->
+                                        <div class="chart-bar" style="width: <%= percentualAmbiental %>%">
+                                            <span><%= totalAmbiental %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabela Resumo -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Resumo por Status de Resolução</h3>
+                        <p class="card-description">Detalhamento quantitativo das denúncias</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="table-card">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Quantidade</th>
+                                        <th>Percentual</th>
+                                        <th>Animais</th>
+                                        <th>Ambiental</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="status-indicator">
+                                                <span class="status-dot yellow"></span>
+                                                Pendente
+                                            </div>
+                                        </td>
+                                        <td>2</td>
+                                        <td>25.0%</td>
+                                        <td>2</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="status-indicator">
+                                                <span class="status-dot blue"></span>
+                                                Em Análise
+                                            </div>
+                                        </td>
+                                        <td>1</td>
+                                        <td>12.5%</td>
+                                        <td>1</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="status-indicator">
+                                                <span class="status-dot purple"></span>
+                                                Em Andamento
+                                            </div>
+                                        </td>
+                                        <td>2</td>
+                                        <td>25.0%</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="status-indicator">
+                                                <span class="status-dot green"></span>
+                                                Resolvida
+                                            </div>
+                                        </td>
+                                        <td>2</td>
+                                        <td>25.0%</td>
+                                        <td>0</td>
+                                        <td>2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="status-indicator">
+                                                <span class="status-dot gray"></span>
+                                                Arquivada
+                                            </div>
+                                        </td>
+                                        <td>1</td>
+                                        <td>12.5%</td>
+                                        <td>1</td>
+                                        <td>0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    <script>
+        const statusLabels = <%- JSON.stringify(statusLabels) %>;
+        const statusCounts = <%- JSON.stringify(statusCounts) %>;
+        const statusColors = ['#f59e0b', '#2f7a3f', '#8b5cf6', '#10b981', '#6b7280'];
+
+        function renderStatusPieChart() {
+            const canvas = document.getElementById('statusChart');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            const total = statusCounts.reduce((sum, count) => sum + count, 0);
+            const size = 240;
+            const center = size / 2;
+            const radius = 90;
+
+            canvas.width = size;
+            canvas.height = size;
+            ctx.clearRect(0, 0, size, size);
+
+            if (total === 0) {
+                ctx.fillStyle = '#e5e7eb';
+                ctx.beginPath();
+                ctx.arc(center, center, radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#374151';
+                ctx.font = '16px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Sem dados', center, center + 5);
+                return;
+            }
+
+            let startAngle = -Math.PI / 2;
+
+            statusCounts.forEach((count, index) => {
+                if (count === 0) return;
+
+                const sliceAngle = (count / total) * Math.PI * 2;
+                ctx.beginPath();
+                ctx.moveTo(center, center);
+                ctx.arc(center, center, radius, startAngle, startAngle + sliceAngle);
+                ctx.closePath();
+                ctx.fillStyle = statusColors[index];
+                ctx.fill();
+                startAngle += sliceAngle;
+            });
+
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(center, center, 45, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#111827';
+            ctx.font = 'bold 20px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(total, center, center - 4);
+            ctx.font = '12px sans-serif';
+            ctx.fillText('denúncias', center, center + 16);
+        }
+
+        function renderStatusLegend() {
+            const legend = document.getElementById('statusLegend');
+            if (!legend) return;
+
+            legend.innerHTML = statusLabels.map((label, index) => `
+                <div class="chart-bar-item" style="margin-top: 0.75rem;">
+                    <div class="chart-bar-label" style="display:flex; align-items:center; gap:0.5rem;">
+                        <span style="display:inline-block; width:12px; height:12px; border-radius:9999px; background:${statusColors[index]};"></span>
+                        ${label}
+                    </div>
+                    <div>${statusCounts[index]}</div>
+                </div>
+            `).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderStatusPieChart();
+            renderStatusLegend();
+        });
+    </script>
+    <script src="/script.js"></script>
+<%- include('../rodape.ejs') %>

@@ -1,0 +1,23 @@
+{
+  "name": "node6info",
+  "version": "1.0.0",
+  "description": "revisando",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "teste",
+    "test:email": "node scripts/test-email.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.22.1",
+    "express-session": "^1.19.0",
+    "mongodb": "6.15.0",
+    "mongoose": "8.3.4",
+    "multer": "^1.4.5-lts.2",
+    "nodemailer": "^6.10.1",
+    "sharp": "^0.34.5"
+  }
+}

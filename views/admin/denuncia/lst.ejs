@@ -1,0 +1,81 @@
+<%- include('../cabecalho2.ejs', { currentSection: 'denuncia' }) %>
+            <div id="listPage" class="page active">
+                <div class="page-header">
+                    <div>
+                        <h2>Gerenciar Denúncias</h2>
+                        <p>Acompanhe todas as denúncias registradas no sistema.</p>
+                    </div>
+                    <a class="btn btn-primary" href="/admin/denuncia/add2">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14"></path>
+                            <path d="M5 12h14"></path>
+                        </svg>
+                        <span>Nova Denúncia</span>
+                    </a>
+                </div>
+
+                <div class="filters-card">
+                    <div class="filters-grid">
+                        <div class="search-box">
+                            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                            <input type="text" placeholder="Buscar por número, denunciante ou denunciado..." id="searchInput">
+                        </div>
+                        <select id="filterSituacao">
+                            <option value="todas">Todas as situações</option>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Em Análise">Em Análise</option>
+                            <option value="Em Andamento">Em Andamento</option>
+                            <option value="Resolvida">Resolvida</option>
+                            <option value="Arquivada">Arquivada</option>
+                            <option value="Inativa">Inativa</option>
+                        </select>
+                        <select id="filterEspecie">
+                            <option value="todas">Todas as espécies</option>
+                            <option value="Animais">Animais</option>
+                            <option value="Ambiental">Ambiental</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="results-count" id="resultsCount">Exibindo 8 de 8 denúncias</div>
+
+                <div class="table-card">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Denunciante</th>
+                                <th>Data/Hora</th>
+                                <th>Espécie</th>
+                                <th>Situação</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="info-banner">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        <path d="m9 12 2 2 4-5"></path>
+                    </svg>
+                    <div>
+                        <strong>Importante</strong>
+                        <span>O acompanhamento das denúncias é fundamental para a proteção do meio ambiente e dos animais.</span>
+                    </div>
+                </div>
+            </div>
+
+    <script>
+        const denuncias = <%- JSON.stringify(DenunciasView || []) %>;
+    </script>
+    <script>
+        window.DENUNCIA_BASE_PATH = '/admin';
+    </script>
+    <script src="/script.js"></script>
+
+<%- include('../rodape.ejs') %>

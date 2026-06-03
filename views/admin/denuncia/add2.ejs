@@ -1,0 +1,466 @@
+<%- include('../cabecalho2.ejs', { currentSection: 'denuncia' }) %>
+<% const isAdminFlag = typeof isAdmin === 'undefined' ? true : isAdmin; %>
+<% const basePath = isAdminFlag ? '/admin' : '/usuario'; %>
+<% const tipoSelecionado = typeof tipoDenuncia === 'undefined' ? null : tipoDenuncia; %>
+<% const especieSelecionada = tipoSelecionado === 'ambiental' ? 'Ambiental' : 'Animais'; %>
+<div id="formPage" class="page active denuncia-create">
+    <div class="denuncia-page-title">
+        <div>
+            <h2>Nova Denúncia</h2>
+            <p><%= tipoSelecionado ? 'Preencha as informações abaixo para registrar sua denúncia.' : 'Escolha o tipo de denúncia que deseja registrar.' %></p>
+        </div>
+    </div>
+
+    <% if (!tipoSelecionado) { %>
+        <section class="denuncia-type-selection" aria-label="Tipos de denúncia">
+            <article class="denuncia-type-card ambiental-card">
+                <div class="denuncia-type-icon">
+                    <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M11 20A7 7 0 0 1 4 13c0-5 7-9 7-9s7 4 7 9a7 7 0 0 1-7 7Z"></path>
+                        <path d="M11 20c0-4 2-7 5-9"></path>
+                    </svg>
+                </div>
+                <div class="denuncia-type-content">
+                    <h3>Crimes Ambientais</h3>
+                    <p>Denuncie práticas que causam danos ao meio ambiente, como desmatamento, poluição, queimadas e outros.</p>
+                    <a class="btn btn-primary denuncia-type-btn" href="<%= basePath %>/denuncia/add<%= isAdminFlag ? '2' : '' %>?tipo=ambiental">
+                        Registrar denúncia ambiental
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </article>
+
+            <a class="denuncia-type-card animal-card" href="<%= basePath %>/denuncia/add<%= isAdminFlag ? '2' : '' %>?tipo=animais">
+                <div class="denuncia-type-icon">
+                    <svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="6.75" cy="10.1" r="1.75"></circle>
+                        <circle cx="9.85" cy="6.85" r="1.75"></circle>
+                        <circle cx="14.15" cy="6.85" r="1.75"></circle>
+                        <circle cx="17.25" cy="10.1" r="1.75"></circle>
+                        <path d="M8.4 16.2c0-2.1 1.65-3.9 3.6-3.9s3.6 1.8 3.6 3.9c0 1.35-.9 2.4-2.1 2.4-.55 0-1.02-.18-1.5-.18s-.95.18-1.5.18c-1.2 0-2.1-1.05-2.1-2.4Z"></path>
+                    </svg>
+                </div>
+                <div class="denuncia-type-content">
+                    <h3>Crimes contra Animais</h3>
+                    <p>Denuncie maus-tratos, abandono, tráfico e outras práticas que prejudicam os animais.</p>
+                    <span class="btn denuncia-type-btn animal-btn">
+                        Registrar denúncia contra animais
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </span>
+                </div>
+            </a>
+        </section>
+
+        <div class="denuncia-info-note">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 16v-4"></path>
+                <path d="M12 8h.01"></path>
+            </svg>
+            <span>Sua denúncia é muito importante para proteger o meio ambiente e os animais.</span>
+        </div>
+    <% } else if (tipoSelecionado === 'ambiental') { %>
+    <form class="form environmental-form" action="<%= basePath %>/denuncia/add<%= isAdminFlag ? '2' : '' %>" method="POST" enctype="multipart/form-data" id="denunciaFormServer">
+        <div class="environmental-form-header">
+            <div>
+                <div class="environmental-breadcrumb">
+                    <a href="<%= basePath %>/denuncia/add<%= isAdminFlag ? '2' : '' %>">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5"></path>
+                            <path d="m12 19-7-7 7-7"></path>
+                        </svg>
+                    </a>
+                    <span>Nova Denúncia / Crimes Ambientais</span>
+                </div>
+                <h2>Denúncia de Crime Ambiental</h2>
+                <p>Preencha as informações abaixo para registrar sua denúncia.</p>
+            </div>
+        </div>
+
+        <input type="hidden" name="fonte" value="Site">
+        <input type="hidden" name="especie" value="Ambiental">
+        <input type="hidden" name="quantidade" value="1">
+        <input type="hidden" name="situacao" value="Pendente">
+        <input type="hidden" name="cpf" value="">
+        <input type="hidden" name="sigilo" id="ambientalSigiloValue" value="nao">
+
+        <div class="environmental-grid">
+            <div class="environmental-main">
+                <section class="environmental-section">
+                    <h3><span>1.</span> Sobre o crime ambiental</h3>
+                    <div class="environmental-fields top-fields">
+                        <div class="form-group">
+                            <label for="descricaoSituacao">Tipo de crime ambiental <strong>*</strong></label>
+                            <select id="descricaoSituacao" name="descricaoSituacao" required>
+                                <option value="">Selecione o tipo de crime</option>
+                                <option value="Desmatamento">Desmatamento</option>
+                                <option value="Queimada irregular">Queimada irregular</option>
+                                <option value="Poluição">Poluição</option>
+                                <option value="Descarte irregular de resíduos">Descarte irregular de resíduos</option>
+                                <option value="Crime contra fauna silvestre">Crime contra fauna silvestre</option>
+                                <option value="Outro crime ambiental">Outro crime ambiental</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="data">Data da ocorrência <strong>*</strong></label>
+                            <input type="date" id="data" name="data" value="<%= new Date().toISOString().split('T')[0] %>" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="hora">Horário aproximado</label>
+                            <input type="time" id="hora" name="hora" required>
+                        </div>
+                        <div class="form-group span-2">
+                            <label for="endereco">Local da ocorrência <strong>*</strong></label>
+                            <input type="text" id="endereco" name="endereco" placeholder="Informe o endereço completo ou ponto de referência" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="enderecoProprietario">Município <strong>*</strong></label>
+                            <select id="enderecoProprietario" name="enderecoProprietario" required>
+                                <option value="">Selecione o município</option>
+                                <option value="Bagé">Bagé</option>
+                                <option value="Aceguá">Aceguá</option>
+                                <option value="Candiota">Candiota</option>
+                                <option value="Dom Pedrito">Dom Pedrito</option>
+                                <option value="Hulha Negra">Hulha Negra</option>
+                                <option value="Outro município">Outro município</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="environmental-section">
+                    <h3><span>2.</span> Descrição da ocorrência</h3>
+                    <div class="form-group">
+                        <label for="descricao">Descreva detalhadamente o que aconteceu <strong>*</strong></label>
+                        <textarea id="descricao" name="descricao" rows="6" maxlength="1000" placeholder="Informe todos os detalhes que puder sobre a ocorrência..." required></textarea>
+                        <span class="textarea-counter">0/1000</span>
+                    </div>
+                </section>
+
+                <section class="environmental-section">
+                    <h3><span>3.</span> Evidências (opcional)</h3>
+                    <p class="environmental-hint">Anexe fotos, vídeos ou documentos que possam ajudar na investigação.</p>
+                    <label class="environmental-upload" id="evidenceUploadBox" for="evidencias">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <path d="m17 8-5-5-5 5"></path>
+                            <path d="M12 3v12"></path>
+                        </svg>
+                        <span>Clique para anexar ou arraste os arquivos aqui</span>
+                        <small>PNG, JPG, MP4 ou PDF até 10MB cada. Máx. 5 arquivos.</small>
+                        <input
+                            type="file"
+                            id="evidencias"
+                            name="evidencias"
+                            multiple
+                            accept="image/*,video/*,.pdf,.doc,.docx"
+                        >
+                    </label>
+                    <div class="evidence-list" id="evidenceList" aria-live="polite"></div>
+                    <button class="btn btn-outline evidence-add-more" type="button" id="addMoreEvidence">
+                        Adicionar mais
+                    </button>
+                </section>
+            </div>
+
+                <aside class="environmental-sidebar environmental-section">
+                <h3><span>4.</span> Seus dados</h3>
+                <div class="environmental-user-panel">
+                    <label class="environmental-checkbox">
+                        <input type="checkbox" id="ambientalSigiloToggle">
+                        <span>Desejo manter meus dados em sigilo</span>
+                    </label>
+                    <p class="environmental-hint">Seus dados ficarão protegidos e serão acessíveis apenas para autoridades responsáveis.</p>
+                    <div class="environmental-user-fields">
+                        <div class="form-group">
+                            <label for="nomeDenunciante">Nome completo <strong>*</strong></label>
+                            <input type="text" id="nomeDenunciante" name="nomeDenunciante" placeholder="Seu nome completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-mail <strong>*</strong></label>
+                            <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefone">Telefone</label>
+                            <input type="text" id="telefone" name="telefone" placeholder="(00) 00000-0000">
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <div class="environmental-actions">
+            <button type="button" class="btn btn-outline" onclick="window.location.href='<%= basePath %>/denuncia/lst'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6 6 18"></path>
+                    <path d="m6 6 12 12"></path>
+                </svg>
+                Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m22 2-7 20-4-9-9-4Z"></path>
+                    <path d="M22 2 11 13"></path>
+                </svg>
+                Enviar denúncia
+            </button>
+        </div>
+    </form>
+    <% } else { %>
+    <form class="form environmental-form" action="<%= basePath %>/denuncia/add<%= isAdminFlag ? '2' : '' %>" method="POST" enctype="multipart/form-data" id="denunciaFormServer">
+        <div class="environmental-form-header">
+            <div>
+                <div class="environmental-breadcrumb">
+                    <a href="<%= basePath %>/denuncia/add<%= isAdminFlag ? '2' : '' %>">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5"></path>
+                            <path d="m12 19-7-7 7-7"></path>
+                        </svg>
+                    </a>
+                    <span>Nova Denúncia / Crimes contra Animais</span>
+                </div>
+                <h2>Denúncia de Crime contra Animais</h2>
+                <p>Preencha as informações abaixo para registrar sua denúncia.</p>
+            </div>
+        </div>
+
+        <input type="hidden" name="fonte" value="Site">
+        <input type="hidden" name="especie" value="Animais">
+        <input type="hidden" name="situacao" value="Pendente">
+        <input type="hidden" name="cpf" value="">
+        <input type="hidden" name="sigilo" id="ambientalSigiloValue" value="nao">
+
+        <div class="environmental-grid">
+            <div class="environmental-main">
+                <section class="environmental-section">
+                    <h3><span>1.</span> Sobre o crime</h3>
+                    <div class="environmental-fields top-fields">
+                        <div class="form-group">
+                            <label for="descricaoSituacao">Tipo de ocorrência <strong>*</strong></label>
+                            <select id="descricaoSituacao" name="descricaoSituacao" required>
+                                <option value="">Selecione o tipo de ocorrência</option>
+                                <option value="Maus-tratos">Maus-tratos</option>
+                                <option value="Abandono">Abandono</option>
+                                <option value="Tráfico de animais">Tráfico de animais</option>
+                                <option value="Animal em situação de risco">Animal em situação de risco</option>
+                                <option value="Criação irregular">Criação irregular</option>
+                                <option value="Outro crime contra animais">Outro crime contra animais</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="data">Data da ocorrência <strong>*</strong></label>
+                            <input type="date" id="data" name="data" value="<%= new Date().toISOString().split('T')[0] %>" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="hora">Horário aproximado</label>
+                            <input type="time" id="hora" name="hora" required>
+                        </div>
+                        <div class="form-group span-2">
+                            <label for="endereco">Local da ocorrência <strong>*</strong></label>
+                            <input type="text" id="endereco" name="endereco" placeholder="Informe o endereço completo ou ponto de referência" required>
+                        </div>
+                         <div class="form-group">
+                            <label for="enderecoProprietario">Município <strong>*</strong></label>
+                            <select id="enderecoProprietario" name="enderecoProprietario" required>
+                                <option value="">Selecione o município</option>
+                                <option value="Bagé">Bagé</option>
+                                <option value="Aceguá">Aceguá</option>
+                                <option value="Candiota">Candiota</option>
+                                <option value="Dom Pedrito">Dom Pedrito</option>
+                                <option value="Hulha Negra">Hulha Negra</option>
+                                <option value="Outro município">Outro município</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="environmental-section">
+                    <h3><span>2.</span> Descrição da ocorrência</h3>
+                    <div class="form-group">
+                        <label for="descricao">Descreva detalhadamente o que aconteceu <strong>*</strong></label>
+                        <textarea id="descricao" name="descricao" rows="6" maxlength="1000" placeholder="Informe todos os detalhes que puder sobre a ocorrência..." required></textarea>
+                        <span class="textarea-counter">0/1000</span>
+                    </div>
+                      <div class="form-group">
+                            <label for="quantidade">Quantidade de animais <strong>*</strong></label>
+                            <input type="number" id="quantidade" name="quantidade" min="1" value="1" required>
+                        </div>
+                </section>
+
+                <section class="environmental-section">
+                    <h3><span>3.</span> Evidências (opcional)</h3>
+                    <p class="environmental-hint">Anexe fotos, vídeos ou documentos que possam ajudar na investigação.</p>
+                    <label class="environmental-upload" id="evidenceUploadBox" for="evidencias">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <path d="m17 8-5-5-5 5"></path>
+                            <path d="M12 3v12"></path>
+                        </svg>
+                        <span>Clique para anexar ou arraste os arquivos aqui</span>
+                        <small>PNG, JPG, MP4 ou PDF até 10MB cada. Máx. 5 arquivos.</small>
+                        <input
+                            type="file"
+                            id="evidencias"
+                            name="evidencias"
+                            multiple
+                            accept="image/*,video/*,.pdf,.doc,.docx"
+                        >
+                    </label>
+                    <div class="evidence-list" id="evidenceList" aria-live="polite"></div>
+                    <button class="btn btn-outline evidence-add-more" type="button" id="addMoreEvidence">
+                        Adicionar mais
+                    </button>
+                </section>
+            </div>
+
+            <aside class="environmental-sidebar environmental-section">
+                <h3><span>4.</span> Seus dados</h3>
+                <div class="environmental-user-panel">
+                    <label class="environmental-checkbox">
+                        <input type="checkbox" id="ambientalSigiloToggle">
+                        <span>Desejo manter meus dados em sigilo</span>
+                    </label>
+                    <p class="environmental-hint">Seus dados ficarão protegidos e serão acessíveis apenas para autoridades responsáveis.</p>
+                    <div class="environmental-user-fields">
+                        <div class="form-group">
+                            <label for="nomeDenunciante">Nome completo <strong>*</strong></label>
+                            <input type="text" id="nomeDenunciante" name="nomeDenunciante" placeholder="Seu nome completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-mail <strong>*</strong></label>
+                            <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefone">Telefone</label>
+                            <input type="text" id="telefone" name="telefone" placeholder="(00) 00000-0000">
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <div class="environmental-actions">
+            <button type="button" class="btn btn-outline" onclick="window.location.href='<%= basePath %>/denuncia/lst'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6 6 18"></path>
+                    <path d="m6 6 12 12"></path>
+                </svg>
+                Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m22 2-7 20-4-9-9-4Z"></path>
+                    <path d="M22 2 11 13"></path>
+                </svg>
+                Enviar denúncia
+            </button>
+        </div>
+    </form>
+    <% } %>
+</div>
+
+<script src="/script.js"></script>
+<script>
+    const descricao = document.getElementById('descricao');
+    const descricaoCounter = document.querySelector('.textarea-counter');
+
+    if (descricao && descricaoCounter) {
+        const updateCounter = () => {
+            descricaoCounter.textContent = `${descricao.value.length}/1000`;
+        };
+
+        descricao.addEventListener('input', updateCounter);
+        updateCounter();
+    }
+
+    const evidenciasInput = document.getElementById('evidencias');
+    const evidenceUploadBox = document.getElementById('evidenceUploadBox');
+    const evidenceList = document.getElementById('evidenceList');
+    const addMoreEvidence = document.getElementById('addMoreEvidence');
+    const selectedEvidenceFiles = [];
+
+    const formatFileSize = (bytes) => {
+        if (bytes < 1024) return `${bytes} B`;
+        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+        return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    };
+
+    const syncEvidenceInput = () => {
+        if (!evidenciasInput) return;
+
+        const transfer = new DataTransfer();
+        selectedEvidenceFiles.forEach((file) => transfer.items.add(file));
+        evidenciasInput.files = transfer.files;
+    };
+
+    const renderEvidenceList = () => {
+        if (!evidenceList) return;
+
+        if (!selectedEvidenceFiles.length) {
+            evidenceList.innerHTML = '';
+            evidenceList.classList.remove('has-files');
+            evidenceUploadBox?.classList.remove('is-hidden');
+            return;
+        }
+
+        evidenceUploadBox?.classList.add('is-hidden');
+        evidenceList.classList.add('has-files');
+        evidenceList.innerHTML = '';
+
+        selectedEvidenceFiles.forEach((file, index) => {
+            const item = document.createElement('div');
+            const content = document.createElement('div');
+            const idLabel = document.createElement('strong');
+            const fileName = document.createElement('span');
+            const fileSize = document.createElement('small');
+
+            item.className = 'evidence-item';
+            idLabel.textContent = `ID do arquivo: Arquivo ${index + 1}`;
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+
+            content.append(idLabel, fileName);
+            item.append(content, fileSize);
+            evidenceList.appendChild(item);
+        });
+    };
+
+    if (evidenciasInput) {
+        evidenciasInput.addEventListener('change', () => {
+            Array.from(evidenciasInput.files || []).forEach((file) => {
+                const alreadyAdded = selectedEvidenceFiles.some((selectedFile) => (
+                    selectedFile.name === file.name &&
+                    selectedFile.size === file.size &&
+                    selectedFile.lastModified === file.lastModified
+                ));
+
+                if (!alreadyAdded) {
+                    selectedEvidenceFiles.push(file);
+                }
+            });
+
+            syncEvidenceInput();
+            renderEvidenceList();
+        });
+    }
+
+    addMoreEvidence?.addEventListener('click', () => {
+        evidenciasInput?.click();
+    });
+
+    const ambientalSigiloToggle = document.getElementById('ambientalSigiloToggle');
+    const ambientalSigiloValue = document.getElementById('ambientalSigiloValue');
+
+    ambientalSigiloToggle?.addEventListener('change', () => {
+        if (ambientalSigiloValue) {
+            ambientalSigiloValue.value = ambientalSigiloToggle.checked ? 'sim' : 'nao';
+        }
+    });
+</script>
+<%- include('../rodape.ejs') %>
