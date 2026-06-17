@@ -12,6 +12,7 @@ const Denuncia = conexao.Schema({
     //2. dados da denuncia
     endereco:{type:String},
     especie:{type:String},
+    tipoAnimal:{type:String},
     quantidade:{type:Number},
     situacao:{type:String, required:true},
     descricaoSituacao:{type:String},

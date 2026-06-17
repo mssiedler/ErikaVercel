@@ -36,7 +36,7 @@
                     <span>Denúncia <%= Denuncia.ndenuncia ? `#${Denuncia.ndenuncia}` : '' %> / <%= crumbTitle %></span>
                 </div>
                 <h2><%= pageTitle %></h2>
-                <p>Confira os dados registrados e atualize as providências do caso.</p>
+                <p><%= isAdminFlag ? 'Confira os dados registrados e atualize as providências do caso.' : 'Confira os dados registrados e acompanhe a situação do caso.' %></p>
             </div>
         </div>
 
@@ -64,6 +64,10 @@
                             <input type="text" id="endereco" value="<%= Denuncia.endereco || '' %>" readonly>
                         </div>
                         <% if (isAnimalCase) { %>
+                            <div class="form-group">
+                                <label for="tipoAnimal">Tipo de animal</label>
+                                <input type="text" id="tipoAnimal" value="<%= Denuncia.tipoAnimal || '' %>" readonly>
+                            </div>
                             <div class="form-group">
                                 <label for="quantidade">Quantidade de animais</label>
                                 <input type="number" id="quantidade" value="<%= Denuncia.quantidade || 1 %>" readonly>

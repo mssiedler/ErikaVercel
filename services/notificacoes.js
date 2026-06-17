@@ -109,6 +109,7 @@ function criarResumoNovaDenuncia(denuncia) {
         linhaResumo('Hora', denuncia.hora),
         linhaResumo('Endereco', denuncia.endereco),
         linhaResumo('Especie', denuncia.especie),
+        linhaResumo('Tipo de animal', denuncia.tipoAnimal),
         linhaResumo('Quantidade', denuncia.quantidade),
         linhaResumo('Situacao', denuncia.situacao),
         linhaResumo('Descricao', denuncia.descricao),

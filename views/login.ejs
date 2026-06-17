@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Acesso ao Sistema</title>
+  <link rel="icon" href="/imagem/favic.png" type="image/png">
   <style>
     * {
       box-sizing: border-box;
@@ -373,31 +374,18 @@
       border-radius: 8px;
       background: #fee2e2;
       color: #991b1b;
-      padding: 12px 14px;import express from 'express';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-import routes from '../routes/route.js'; // rotas externas
-import { createServer } from 'http';
-
-const app = express();
-
-app.use(express.urlencoded({ extended: true }));
-app.set('view engine', 'ejs');
-
-// Caminho correto das views e public
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Servir arquivos estáticos
-app.use(express.static(join(__dirname, '../public')));
-app.set('views', join(__dirname, '../views'));
-
-// Rotas
-app.use(routes)
-app.listen(3001)
-// Exporta o handler compatível com Vercel
-export default app;
+      padding: 12px 14px;
       font-size: 0.92rem;
+    }
+
+    .success {
+      border: 1px solid #b9e4c9;
+      border-radius: 8px;
+      background: #e8f6ee;
+      color: #0d5630;
+      padding: 12px 14px;
+      font-size: 0.92rem;
+      font-weight: 700;
     }
 
     .footer {
@@ -635,15 +623,18 @@ export default app;
           <% if (typeof erro !== 'undefined' && erro) { %>
             <div class="error"><%= erro %></div>
           <% } %>
+          <% if (typeof sucesso !== 'undefined' && sucesso) { %>
+            <div class="success"><%= sucesso %></div>
+          <% } %>
 
           <div>
-            <label for="nome">Nome de usuário</label>
+            <label for="nome">Nome de usuário ou e-mail</label>
             <div class="field">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M20 21a8 8 0 0 0-16 0"></path>
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
-              <input id="nome" name="nome" type="text" placeholder="Digite seu nome de usuário" autocomplete="username" required>
+              <input id="nome" name="nome" type="text" placeholder="Digite seu nome de usuário ou e-mail" autocomplete="username" value="<%= typeof identificador !== 'undefined' ? identificador : '' %>" required>
             </div>
           </div>
 
@@ -699,6 +690,15 @@ export default app;
           </svg>
           Criar uma conta
         </a>
+        <a class="help" id="recuperarSenhaLink" href="/recuperar-senha">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 7a2 2 0 1 1 2 2"></path>
+            <path d="M11 11a4 4 0 1 1 1.17-2.83"></path>
+            <path d="M7 14v3"></path>
+            <path d="M7 17h3"></path>
+          </svg>
+          Esqueci minha senha
+        </a>
 
         <div class="notice">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -743,6 +743,15 @@ export default app;
       input.type = isHidden ? 'text' : 'password';
       button.setAttribute('aria-label', isHidden ? 'Ocultar senha' : 'Mostrar senha');
     }
+
+    const recuperarSenhaLink = document.getElementById('recuperarSenhaLink');
+    const loginInput = document.getElementById('nome');
+    recuperarSenhaLink?.addEventListener('click', function () {
+      const valor = loginInput?.value?.trim();
+      if (valor && valor.includes('@')) {
+        recuperarSenhaLink.href = `/recuperar-senha?email=${encodeURIComponent(valor)}`;
+      }
+    });
   </script>
 </body>
 </html>

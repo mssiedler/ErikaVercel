@@ -1,5 +1,7 @@
 import Usuario from '../models/usuarios.js'
 import Denuncia from '../models/denuncia.js'
+import crypto from 'crypto'
+import { enviarEmailNotificacao } from '../services/email.js'
 
 
 export async function abrecadastro(req, res){
@@ -53,10 +55,20 @@ export async function abrelogin(req, res){
 export async function login(req, res){
     try {
         const { nome, senha, tipo } = req.body;
-        const usuario = await Usuario.findOne({ nome, senha });
+        const identificador = String(nome || '').trim();
+        const usuario = await Usuario.findOne({
+            senha,
+            $or: [
+                { nome: identificador },
+                { email: new RegExp(`^${escaparRegex(identificador)}$`, 'i') }
+            ]
+        });
 
         if (!usuario) {
-            return res.status(401).render('login', { erro: 'Usuário ou senha inválidos.' });
+            return res.status(401).render('login', {
+                erro: 'Usuário ou senha inválidos.',
+                identificador
+            });
         }
 
         if (tipo === 'admin' && !usuario.admin && !usuario.superadmin) {
@@ -76,6 +88,136 @@ export async function login(req, res){
     } catch (error) {
         console.error('Erro no login:', error);
         return res.status(500).render('login', { erro: 'Erro ao realizar login.' });
+    }
+}
+
+function hashToken(token) {
+    return crypto.createHash('sha256').update(token).digest('hex');
+}
+
+function escaparRegex(valor) {
+    return String(valor).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function escaparHtml(valor = '') {
+    return String(valor)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function montarUrlBase(req) {
+    return process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
+}
+
+export async function abreRecuperarSenha(req, res) {
+    return res.render('recuperar-senha', { email: req.query.email || '' });
+}
+
+export async function solicitarRecuperacaoSenha(req, res) {
+    try {
+        const email = String(req.body.email || '').trim().toLowerCase();
+        const usuario = await Usuario.findOne({
+            email: new RegExp(`^${escaparRegex(email)}$`, 'i')
+        });
+
+        if (usuario) {
+            const token = crypto.randomBytes(32).toString('hex');
+            usuario.resetSenhaToken = hashToken(token);
+            usuario.resetSenhaExpira = new Date(Date.now() + 60 * 60 * 1000);
+            await usuario.save();
+
+            const resetUrl = `${montarUrlBase(req)}/redefinir-senha/${token}`;
+            const resetUrlHtml = escaparHtml(resetUrl);
+            await enviarEmailNotificacao({
+                to: usuario.email,
+                subject: 'Recuperação de senha',
+                text: [
+                    `Olá, ${usuario.nome}.`,
+                    '',
+                    'Recebemos uma solicitação para recuperar sua senha.',
+                    `Acesse o link abaixo para criar uma nova senha. O link expira em 1 hora:`,
+                    resetUrl,
+                    '',
+                    'Se você não solicitou essa alteração, ignore este e-mail.'
+                ].join('\n'),
+                html: `
+                    <p>Olá, ${escaparHtml(usuario.nome)}.</p>
+                    <p>Recebemos uma solicitação para recuperar sua senha.</p>
+                    <p><a href="${resetUrlHtml}">Clique aqui para criar uma nova senha</a>.</p>
+                    <p>O link expira em 1 hora. Se você não solicitou essa alteração, ignore este e-mail.</p>
+                `
+            });
+        }
+
+        return res.render('recuperar-senha', {
+            sucesso: 'Se o e-mail estiver cadastrado, enviaremos um link para recuperar a senha.'
+        });
+    } catch (error) {
+        console.error('Erro ao solicitar recuperação de senha:', error);
+        return res.status(500).render('recuperar-senha', { erro: 'Erro ao solicitar recuperação de senha.' });
+    }
+}
+
+export async function abreRedefinirSenha(req, res) {
+    const tokenHash = hashToken(req.params.token || '');
+    const usuario = await Usuario.findOne({
+        resetSenhaToken: tokenHash,
+        resetSenhaExpira: { $gt: new Date() }
+    });
+
+    if (!usuario) {
+        return res.status(400).render('recuperar-senha', {
+            erro: 'Link inválido ou expirado. Solicite uma nova recuperação de senha.'
+        });
+    }
+
+    return res.render('redefinir-senha', { token: req.params.token });
+}
+
+export async function redefinirSenha(req, res) {
+    try {
+        const { senha, confirmarSenha } = req.body;
+
+        if (!senha || senha.length < 4) {
+            return res.status(400).render('redefinir-senha', {
+                token: req.params.token,
+                erro: 'Informe uma senha com pelo menos 4 caracteres.'
+            });
+        }
+
+        if (senha !== confirmarSenha) {
+            return res.status(400).render('redefinir-senha', {
+                token: req.params.token,
+                erro: 'As senhas não conferem.'
+            });
+        }
+
+        const usuario = await Usuario.findOne({
+            resetSenhaToken: hashToken(req.params.token || ''),
+            resetSenhaExpira: { $gt: new Date() }
+        });
+
+        if (!usuario) {
+            return res.status(400).render('recuperar-senha', {
+                erro: 'Link inválido ou expirado. Solicite uma nova recuperação de senha.'
+            });
+        }
+
+        usuario.senha = senha;
+        usuario.resetSenhaToken = undefined;
+        usuario.resetSenhaExpira = undefined;
+        await usuario.save();
+
+        return res.render('login', { sucesso: 'Senha redefinida com sucesso. Faça login com sua nova senha.' });
+    } catch (error) {
+        console.error('Erro ao redefinir senha:', error);
+        return res.status(500).render('redefinir-senha', {
+            token: req.params.token,
+            erro: 'Erro ao redefinir senha.'
+        });
     }
 }
 

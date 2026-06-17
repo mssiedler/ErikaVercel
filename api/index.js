@@ -9,6 +9,9 @@ import session from 'express-session'
 
 app.use(express.urlencoded({extended:true}))
 app.set('view engine', 'ejs')
+
+
+
 app.use(session({
     secret: 'denuncias-secret',
     resave: false,
@@ -17,7 +20,7 @@ app.use(session({
 
 //liberar acesso a pasta public
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { dirname, join } from 'path';
 
 import mongoose from 'mongoose'
 const url = 'mongodb+srv://aluno:aluno@cluster0.diho964.mongodb.net/?appName=Cluster0'
@@ -26,17 +29,19 @@ const url = 'mongodb+srv://aluno:aluno@cluster0.diho964.mongodb.net/?appName=Clu
 //converte o camimnho do arquivo atual
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-app.use(express.static(__dirname + '../public'));
+
+app.use(express.static(join(__dirname, '../public')));
 app.set('views', join(__dirname, '../views'));
 
 import routes from "../routes/route.js"
 import publicRoutes from "../routes/routP.js"
 import { carregarNotificacoesHeader } from "../controllers/notificacao.js"
 
+/*
 app.use((req, res, next) => {
     res.locals.currentUser = req.session.user;
     const path = req.path;
-    const isPublic = path.startsWith('/login') || path.startsWith('/cadastro');
+    const isPublic = path.startsWith('/login') || path.startsWith('/cadastro') || path.startsWith('/recuperar-senha') || path.startsWith('/redefinir-senha');
     if (!req.session.user && (path.startsWith('/admin') || path.startsWith('/usuario') || path.startsWith('/notificacoes')) && !isPublic) {
         return res.redirect('/login');
     }
@@ -51,11 +56,15 @@ app.use((req, res, next) => {
     }
     next();
 });
+*/
 
 app.use(carregarNotificacoesHeader);
 app.use(publicRoutes)
 app.use(routes)
 
-app.listen(3001, () => {
-    console.log('Servidor rodando na porta 3001');
+
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
 })
