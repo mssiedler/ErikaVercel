@@ -1,0 +1,59 @@
+<%-include('../cabecalho.ejs')%>
+<h1>Listagem de Times</h1>
+<div class="search">
+  <form method="post">
+    <input type="text" name="pesquisar" placeholder="digite a busca.."><button type="submit"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Pesquisar</button>
+  </form>
+</div>
+
+<!-- Tabela de Times -->
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Estádio</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%Times.forEach(function(time){%>
+    <tr>
+      <td><%=time.id%></td>
+      <td><%=time.nome%></td>
+      <td><%=time.estadio%></td>
+      <td>
+        <a href="/admin/time/edt/<%=time.id%>" class="btn edit"><i class="fas fa-edit"></i>&nbsp;Editar</a>
+        
+        <button class="btn delete"  onclick="confirmarExclusao('<%=time.id%>')"><i class="fas fa-trash"></i>&nbsp; Excluir</button>
+      </td>
+    </tr>
+    <%})%>
+   
+   
+  </tbody>
+</table>
+<!--FIM TABELA-->
+<div class="footer">
+  <a href="/admin/time/add" class="btn add"><i class="fas fa-add"></i>&nbsp;Adicionar</a>
+</div>
+
+
+<script>
+function confirmarExclusao(id) {
+    // Exibe a mensagem de confirmação
+    var confirmacao = confirm("Tem certeza que deseja excluir?");
+
+    // Se o usuário confirmar, executa a ação de exclusão
+    if (confirmacao) {
+        // Aqui você processa a exclusão
+        document.location.href="/admin/time/del/"+id;
+        alert("Item excluído com sucesso!");
+      
+    } else {
+        // Se o usuário cancelar, não faz nada
+        alert("Exclusão cancelada.");
+    }
+}
+</script>
+<%-include('../rodape.ejs')%>

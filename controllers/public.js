@@ -95,6 +95,10 @@ function hashToken(token) {
     return crypto.createHash('sha256').update(token).digest('hex');
 }
 
+function limparTokenReset(token = '') {
+    return String(token).trim().replace(/[^a-f0-9]/gi, '');
+}
+
 function escaparRegex(valor) {
     return String(valor).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -162,7 +166,8 @@ export async function solicitarRecuperacaoSenha(req, res) {
 }
 
 export async function abreRedefinirSenha(req, res) {
-    const tokenHash = hashToken(req.params.token || '');
+    const token = limparTokenReset(req.params.token);
+    const tokenHash = hashToken(token);
     const usuario = await Usuario.findOne({
         resetSenhaToken: tokenHash,
         resetSenhaExpira: { $gt: new Date() }
@@ -174,29 +179,30 @@ export async function abreRedefinirSenha(req, res) {
         });
     }
 
-    return res.render('redefinir-senha', { token: req.params.token });
+    return res.render('redefinir-senha', { token });
 }
 
 export async function redefinirSenha(req, res) {
     try {
+        const token = limparTokenReset(req.params.token);
         const { senha, confirmarSenha } = req.body;
 
         if (!senha || senha.length < 4) {
             return res.status(400).render('redefinir-senha', {
-                token: req.params.token,
+                token,
                 erro: 'Informe uma senha com pelo menos 4 caracteres.'
             });
         }
 
         if (senha !== confirmarSenha) {
             return res.status(400).render('redefinir-senha', {
-                token: req.params.token,
+                token,
                 erro: 'As senhas não conferem.'
             });
         }
 
         const usuario = await Usuario.findOne({
-            resetSenhaToken: hashToken(req.params.token || ''),
+            resetSenhaToken: hashToken(token),
             resetSenhaExpira: { $gt: new Date() }
         });
 
@@ -215,7 +221,7 @@ export async function redefinirSenha(req, res) {
     } catch (error) {
         console.error('Erro ao redefinir senha:', error);
         return res.status(500).render('redefinir-senha', {
-            token: req.params.token,
+            token: limparTokenReset(req.params.token),
             erro: 'Erro ao redefinir senha.'
         });
     }
